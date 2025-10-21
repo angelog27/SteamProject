@@ -76,7 +76,7 @@ class SteamAchievementFetcher:
 
 # Example usage
 if __name__ == "__main__":
-    # Replace with your Steam API key
+    # API key is within a .env file 
     STEAM_API_KEY = os.getenv("STEAM_API_KEY")
     if not STEAM_API_KEY:
         print("Error: Steam API key not found in .env file.")
