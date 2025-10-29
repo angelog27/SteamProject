@@ -11,6 +11,14 @@ header {
 	justify-content: space-between;
 	align-items: center;
 }
+.Wrapper {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	align-items: ;
+	-o-transition-property: prop;
+	transition-property: prop;
+}
 .Nav_Menu li{
 	padding: 20px;
 	display: inline-block
