@@ -15,9 +15,6 @@ header {
 	display:flex;
 	justify-content: center;
 	align-items: center;
-	align-items: ;
-	-o-transition-property: prop;
-	transition-property: prop;
 }
 .Nav_Menu li{
 	padding: 20px;
@@ -29,4 +26,7 @@ header {
 }
 .Nav_Menu li a:hover{
 	color:blueviolet;
+}
+button {
+	justify-content: center;
 }
