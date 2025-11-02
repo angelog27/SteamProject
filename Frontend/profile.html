@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="stylesheet.css">
+<title>profile</title>
+</head>
+<body>
+	<header>
+		<img src="../images/LOGO.png" width="100" height="100" alt="Logo"/>
+		<nav>
+		  <ul class="Nav_Menu">
+			  <li><a href="index.html">Home</a></li>
+			  <li><a href="profile.html">Profile</a></li>
+			  <li><a href="leaderboard.html">Leaderboard</a></li>
+		  </ul>
+		</nav>
+	</header>
+	<div class="Wrapper">
+		<div id="profileContent">
+			<h1>Your Profile</h1>
+			<div id="statsDisplay"></div>
+		</div>
+	</div>
+
+	<script>
+		const steamId = localStorage.getItem('steamId');
+
+		if (!steamId) {
+			document.getElementById('statsDisplay').innerHTML = '<p>Please login first from the home page</p>';
+		} else {
+			loadUserStats();
+		}
+
+		async function loadUserStats() {
+			try {
+				const response = await fetch(`http://localhost:5000/api/user-stats/${steamId}`);
+				const data = await response.json();
+				
+				if (response.ok) {
+					const lastDate = data.last_achievement_date ? 
+						new Date(data.last_achievement_date._seconds * 1000).toLocaleString() : 
+						'Never';
+					
+					document.getElementById('statsDisplay').innerHTML = `
+						<h2>${data.username}</h2>
+						<p><strong>Steam ID:</strong> ${data.steam_id}</p>
+						<p><strong>Current Streak:</strong> ${data.current_streak} days</p>
+						<p><strong>Longest Streak:</strong> ${data.longest_streak} days</p>
+						<p><strong>Total Achievements:</strong> ${data.total_achievements_completed}</p>
+						<p><strong>Last Achievement:</strong> ${lastDate}</p>
+					`;
+				} else {
+					document.getElementById('statsDisplay').innerHTML = '<p>Error loading stats</p>';
+				}
+			} catch (error) {
+				document.getElementById('statsDisplay').innerHTML = '<p>Connection error</p>';
+			}
+		}
+	</script>
+</body>
+</html>
