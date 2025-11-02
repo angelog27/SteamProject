@@ -59,8 +59,8 @@ class UserStreakTracker:
         current_time = datetime.now(timezone.utc)
         
         if user_doc.exists:
-            return user_doc.to_dict()
-        else:
+            return user_doc.to_dict()   # if our user already exist we return the user and all of the data within their document
+        else:       # if the user doesnt exist already we create a new user displaying the info below
             new_user = {
                 'steam_id': steam_id,
                 'username': username or f"User_{steam_id[-4:]}",
@@ -70,7 +70,7 @@ class UserStreakTracker:
                 'last_achievement_date': None,
                 'created_at': current_time
             }
-            user_ref.set(new_user)
+            user_ref.set(new_user) # we set the new user in our firebase database
             return new_user
         
     # Complete an achievement and update streaks
@@ -81,36 +81,45 @@ class UserStreakTracker:
         if not user_doc.exists:
             return None
         
+        # We access our firebase database and get the user data
         user_data = user_doc.to_dict()
         current_time = datetime.now(timezone.utc)
         last_achievement_date = user_data.get('last_achievement_date')
         
+        # Dont increment streak if we have already completed an achievement today
         if last_achievement_date is None:
             user_data['current_streak'] = 1
             user_data['longest_streak'] = 1
             user_data['total_achievements_completed'] = 1
             user_data['last_achievement_date'] = current_time
+
+        # If we have a last achievement date, we calculate the time difference
         else:
             if last_achievement_date.tzinfo is None:
                 last_achievement_date = last_achievement_date.replace(tzinfo=timezone.utc)
             
+            # Calculate time difference in hours
             time_diff = (current_time - last_achievement_date)
             hours_since = time_diff.total_seconds() / 3600
             
+            # if within 24 hours, just increment total achievements
             if hours_since < 24:
                 user_data['total_achievements_completed'] += 1
                 user_data['last_achievement_date'] = current_time
+            # if between 24 and 48 hours, increment the user streak
             elif 24 <= hours_since < 48:
                 user_data['current_streak'] += 1
                 user_data['total_achievements_completed'] += 1
                 user_data['last_achievement_date'] = current_time
                 if user_data['current_streak'] > user_data['longest_streak']:
                     user_data['longest_streak'] = user_data['current_streak']
+            # if the user doesnt increment the streak in over 48 hours we reset the streak
             else:
                 user_data['current_streak'] = 1
                 user_data['total_achievements_completed'] += 1
                 user_data['last_achievement_date'] = current_time
-        
+
+        # Update the user data in the database
         user_ref.update(user_data)
         return user_data
     
@@ -138,11 +147,13 @@ streak_tracker = UserStreakTracker("firebase-credentials.json")
 def index():
     return send_from_directory('.', 'index.html')
 
+
 @app.route('/<path:path>')
 def serve_file(path):
     return send_from_directory('.', path)
 
-# API Routes
+# API Routes 
+# User login or creation, using the username as optional but the steam id is required
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
@@ -158,7 +169,7 @@ def login():
 @app.route('/api/random-achievement', methods=['GET'])
 def random_achievement():
     popular_app_ids = [620, 292030, 367520, 504230, 413150, 440, 730, 570, 550, 105600]
-    app_id = random.choice(popular_app_ids)
+    app_id = random.choice(popular_app_ids) # selecting a random game from our popular app id's
     achievement = steam_fetcher.get_random_achievement(app_id)
     
     if achievement:
