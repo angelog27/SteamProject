@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="stylesheet.css">
+<title>HomePage</title>
+</head>
+<body>
+	<header>
+		<img src="../images/LOGO.png" width="100" height="100" alt="Logo"/>
+		<nav>
+		  <ul class="Nav_Menu">
+			  <li><a href="index.html">Home</a></li>
+			  <li><a href="profile.html">Profile</a></li>
+			  <li><a href="leaderboard.html">Leaderboard</a></li>
+		  </ul>
+		</nav>
+	</header>
+	<div class="Wrapper">
+		<div>
+			<h1>SteamID</h1>
+			<div class="Input-box">
+				<input type="text" id="steamId" placeholder="17 Digit Steam ID">
+			</div>
+			<div class="Input-box">
+				<input type="text" id="username" placeholder="Username (Optional)">
+			</div>
+			<button type="submit" onclick="login()">Login</button>
+			<p id="loginMessage"></p>
+			
+			<div id="achievementSection" style="display:none; margin-top: 30px;">
+				<h2>Get Achievement Challenge</h2>
+				<button onclick="getRandomAchievement()">Random Achievement</button>
+				<div class="Input-box" style="margin-top: 10px;">
+					<input type="text" id="appId" placeholder="Enter App ID (Optional)">
+				</div>
+				<button onclick="getSpecificGameAchievement()">Get from Specific Game</button>
+				
+				<div id="achievementDisplay" style="margin-top: 20px;"></div>
+				
+				<button onclick="completeAchievement()" style="margin-top: 20px;">Mark Achievement Complete</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		let currentSteamId = localStorage.getItem('steamId') || '';
+
+		if (currentSteamId) {
+			document.getElementById('achievementSection').style.display = 'block';
+			document.getElementById('steamId').value = currentSteamId;
+		}
+
+		async function login() {
+			const steamId = document.getElementById('steamId').value.trim();
+			const username = document.getElementById('username').value.trim();
+			
+			if (!steamId || steamId.length !== 17) {
+				document.getElementById('loginMessage').textContent = 'Please enter a valid 17-digit Steam ID';
+				return;
+			}
+
+			try {
+				const response = await fetch('http://localhost:5000/api/login', {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify({steam_id: steamId, username: username || null})
+				});
+
+				const data = await response.json();
+				if (response.ok) {
+					currentSteamId = steamId;
+					localStorage.setItem('steamId', steamId);
+					document.getElementById('loginMessage').textContent = `Welcome, ${data.username}!`;
+					document.getElementById('achievementSection').style.display = 'block';
+				} else {
+					document.getElementById('loginMessage').textContent = data.error;
+				}
+			} catch (error) {
+				document.getElementById('loginMessage').textContent = 'Connection error. Is the server running?';
+			}
+		}
+
+		async function getRandomAchievement() {
+			try {
+				const response = await fetch('http://localhost:5000/api/random-achievement');
+				const data = await response.json();
+				
+				if (response.ok) {
+					displayAchievement(data);
+				} else {
+					document.getElementById('achievementDisplay').innerHTML = data.error;
+				}
+			} catch (error) {
+				document.getElementById('achievementDisplay').innerHTML = 'Error fetching achievement';
+			}
+		}
+
+		async function getSpecificGameAchievement() {
+			const appId = document.getElementById('appId').value.trim();
+			
+			if (!appId) {
+				alert('Please enter an App ID');
+				return;
+			}
+
+			try {
+				const response = await fetch(`http://localhost:5000/api/random-achievement/${appId}`);
+				const data = await response.json();
+				
+				if (response.ok) {
+					displayAchievement(data);
+				} else {
+					document.getElementById('achievementDisplay').innerHTML = data.error;
+				}
+			} catch (error) {
+				document.getElementById('achievementDisplay').innerHTML = 'Error fetching achievement';
+			}
+		}
+
+		function displayAchievement(data) {
+			const display = document.getElementById('achievementDisplay');
+			display.innerHTML = `
+				<h3>Achievement Challenge</h3>
+				<p><strong>Game App ID:</strong> ${data.app_id}</p>
+				<p><strong>Achievement:</strong> ${data.achievement.displayName}</p>
+				<p><strong>Description:</strong> ${data.achievement.description}</p>
+			`;
+		}
+
+		async function completeAchievement() {
+			if (!currentSteamId) {
+				alert('Please login first');
+				return;
+			}
+
+			const confirm = window.confirm('Did you complete an achievement? This will update your streak.');
+			if (!confirm) return;
+
+			try {
+				const response = await fetch('http://localhost:5000/api/complete-achievement', {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify({steam_id: currentSteamId})
+				});
+
+				const data = await response.json();
+				if (response.ok) {
+					alert(`Achievement completed! Current Streak: ${data.current_streak} days`);
+				} else {
+					alert(data.error);
+				}
+			} catch (error) {
+				alert('Error updating achievement');
+			}
+		}
+	</script>
+</body>
+</html>
