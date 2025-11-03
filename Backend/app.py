@@ -81,7 +81,7 @@ class UserStreakTracker:
             user_ref.set(new_user) # we set the new user in our firebase database
             return new_user
         
-    # Complete an achievement and update streaks
+    # Complete an achievement along with update streaks
     def complete_achievement(self, steam_id: str) -> Dict:
         user_ref = self.users_collection.document(steam_id)
         user_doc = user_ref.get()
@@ -89,12 +89,12 @@ class UserStreakTracker:
         if not user_doc.exists:
             return None
         
-        # We access our firebase database and get the user data
+        # We use this to access our firebase database and get the user data
         user_data = user_doc.to_dict()
         current_time = datetime.now(timezone.utc)
         last_achievement_date = user_data.get('last_achievement_date')
         
-        # Dont increment streak if we have already completed an achievement today
+        # This part makes sure we dont increment streak if we have already completed an achievement today 
         if last_achievement_date is None:
             user_data['current_streak'] = 1
             user_data['longest_streak'] = 1
