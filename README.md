@@ -14,7 +14,7 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 * .env file
   * The .env file contains the API_KEY which a user must have in order to run the script and make API calls
   * Within the .env file it should be formatted as STEAM_API_KEY = yoursteamapikey
-  * I added a example .env file but it contains my actual api key just rename that file to .env
+  * I added a example .env file but it contains my actual api key just rename that file to .env when running the code
 * .gitignore file
 * all front end code, index.html, leaderboard.html, profile.html, and stylesheet.css as well as the IMAGE.PNG which should be in a seperate folder titled images
 * firebase credentials named as project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json , I did not want to submit the json file directly into the repository so i emailed the exact credential and json file to Proffessor Donze(Angelo Gonzales) instead of hardcoding it
