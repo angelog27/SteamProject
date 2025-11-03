@@ -51,7 +51,7 @@ class SteamAchievementFetcher:
             return None
         return random.choice(achievements)
 
-#Tracker for user streaks and achievements
+#here is the tracker for user streaks and achievements
 class UserStreakTracker:
     def __init__(self, firebase_cred_path: str):
         if not firebase_admin._apps:
