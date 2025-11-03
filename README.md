@@ -19,6 +19,7 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 * all front end code, index.html, leaderboard.html, profile.html, and stylesheet.css as well as the IMAGE.PNG which should be in a seperate folder titled images
 * firebase credentials named as project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json , I did not want to submit the json file directly into the repository so i emailed the exact credential and json file to Proffessor Donze(Angelo Gonzales) instead of hardcoding it
 ** The file I emailed to the Proffessor is the one you will use to run the code instead of the firebase-credentials file I have in the backend folder. THAT IS NOT THE RIGHT KEY NEEDED TO RUN THE CODE instead use the one emailed to the proffessor.
+* we wrote our code on vscode and used the live server extension to actively seek our code on a server so install the Live-Server extension on vscode from Ritwick Dey if not possible the live URL's should still work in the terminal
   
 ### Exact instilation requirements
 * make sure python version is 3.10 + 
@@ -27,6 +28,7 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 * pip install requests
 * pip install python-dotenv
 * pip install firebase-admin
+* Install the Live Server extension on VSCODE
 
 ## Running the Project
 ###
@@ -58,8 +60,8 @@ project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json(file)
 
 In order to run the program simply run the app.py program which is inside of the backend folder. 
 * step 1 is to run the app.py script
-* In the terminal there will be a url as http://localhost:5000/ or a 1:27:5000 like link in which you can click and run view the live server
-* Click the URL and it will bring you to the live server
+* In the terminal there will be a url as http://localhost:5000/ or a 1:27:5000 
+* Double click the index.html file and click the open with live server or go to http://localhost:5000. Make sure the live server extension is installed on vscode
 * You MUST enter a 17 digit steam ID in order to login and properly get a random achivement
 * A username is optional
 * Once you enter your 17 digit steam ID you can press LOGIN, and then press the random achievement button to fetch a random achievement
