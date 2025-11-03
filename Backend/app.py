@@ -60,7 +60,7 @@ class UserStreakTracker:
         self.db = firestore.client()
         self.users_collection = self.db.collection('users')
 
-# Create or get user in the database
+# this is the create or get user in the database
     def get_or_create_user(self, steam_id: str, username: str = None) -> Dict:
         user_ref = self.users_collection.document(steam_id)
         user_doc = user_ref.get()
