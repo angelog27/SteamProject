@@ -121,7 +121,7 @@ class UserStreakTracker:
                 user_data['last_achievement_date'] = current_time
                 if user_data['current_streak'] > user_data['longest_streak']:
                     user_data['longest_streak'] = user_data['current_streak']
-            # if the user doesnt increment the streak in over 48 hours we reset the streak
+            # if the user doesnt increment the streak in over 48 hours then we will reset the streak they day
             else:
                 user_data['current_streak'] = 1
                 user_data['total_achievements_completed'] += 1
