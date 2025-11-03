@@ -160,8 +160,8 @@ def index():
 def serve_file(path):
     return send_from_directory('.', path)
 
-# API Routes 
-# User login or creation, using the username as optional but the steam id is required
+# the acutal API Routes 
+# User login or creation, using the username as optional but the steam id is required to access the next page
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
@@ -177,7 +177,7 @@ def login():
 @app.route('/api/random-achievement', methods=['GET'])
 def random_achievement():
     popular_app_ids = [620, 292030, 367520, 504230, 413150, 440, 730, 570, 550, 105600]
-    app_id = random.choice(popular_app_ids) # selecting a random game from our popular app id's
+    app_id = random.choice(popular_app_ids) # here we are selecting a random game from our popular app id's
     achievement = steam_fetcher.get_random_achievement(app_id)
     
     if achievement:
