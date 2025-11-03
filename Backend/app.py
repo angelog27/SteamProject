@@ -150,7 +150,7 @@ STEAM_API_KEY = os.getenv("STEAM_API_KEY")
 steam_fetcher = SteamAchievementFetcher(STEAM_API_KEY)
 streak_tracker = UserStreakTracker("project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json")
 
-# Routes for HTML files
+# these are the routes for HTML files used
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
