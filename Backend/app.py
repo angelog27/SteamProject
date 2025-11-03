@@ -36,7 +36,7 @@ class SteamAchievementFetcher:
         except requests.exceptions.RequestException as e:
             print(f"Error fetching achievements: {e}")
             return None
-    #we use this to fetch our random achievements 
+    #this section is  used  to fetch random achievements 
     def get_random_achievement(self, app_id: int) -> Optional[Dict]:
         # Simple in-memory cache for achievements per app_id
         if not hasattr(self, '_achievement_cache'):
