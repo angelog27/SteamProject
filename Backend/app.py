@@ -21,7 +21,7 @@ class SteamAchievementFetcher:
         self.api_key = api_key
         self.base_url = "https://api.steampowered.com/"
 
-    #Get achievements for a specific game
+    #the code below allow you to get achievements for a specific game 
     def get_game_achievements(self, app_id) -> Optional[List[Dict]]:
         url = f"{self.base_url}/ISteamUserStats/GetSchemaForGame/v2/"
         params = {'key': self.api_key, 'appid': app_id}
