@@ -18,6 +18,7 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 * .gitignore file
 * all front end code, index.html, leaderboard.html, profile.html, and stylesheet.css as well as the IMAGE.PNG which should be in a seperate folder titled images
 * firebase credentials named as project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json , I did not want to submit the json file directly into the repository so i emailed the exact credential and json file to Proffessor Donze(Angelo Gonzales) instead of hardcoding it
+** The file I emailed to the Proffessor is the one you will use to run the code instead of the firebase-credentials file I have in the backend folder. THAT IS NOT THE RIGHT KEY NEEDED TO RUN THE CODE instead use the one emailed to the proffessor.
   
 ### Exact instilation requirements
 * make sure python version is 3.10 + 
