@@ -7,7 +7,7 @@ from dotenv import load_dotenv                                     # Load enviro
 import os                                                          # Import os to access environment variables                 
 import firebase_admin                                              # Import firebase_admin so we can use the firebase API
 from firebase_admin import credentials, firestore                  # Import credentials and firestore from firebase_admin to authenticate and use the database 
-from datetime import datetime, timezone                            # Import datetime and timezone so whenever we log our data in firebase its in central
+from datetime import datetime, timezone                            # Import datetime and timezone so whenever we log our data in firebase its in UTC
 import zoneinfo                                                    # Import zoneinfo to handle timezone information
 
 load_dotenv()   #loads .env file
@@ -38,7 +38,15 @@ class SteamAchievementFetcher:
             return None
     #we use this to fetch our random achievements 
     def get_random_achievement(self, app_id: int) -> Optional[Dict]:
-        achievements = self.get_game_achievements(app_id)
+        # Simple in-memory cache for achievements per app_id
+        if not hasattr(self, '_achievement_cache'):
+            self._achievement_cache = {}
+        if app_id not in self._achievement_cache:
+            achievements = self.get_game_achievements(app_id)
+            if not achievements:
+                return None
+            self._achievement_cache[app_id] = achievements
+        achievements = self._achievement_cache[app_id]
         if not achievements:
             return None
         return random.choice(achievements)
@@ -137,10 +145,10 @@ class UserStreakTracker:
         users = self.users_collection.order_by('longest_streak', direction=firestore.Query.DESCENDING).limit(10).stream()
         return [user.to_dict() for user in users]
 
-# Initialize services
+# Initialize firebase and steam API services/access
 STEAM_API_KEY = os.getenv("STEAM_API_KEY")
 steam_fetcher = SteamAchievementFetcher(STEAM_API_KEY)
-streak_tracker = UserStreakTracker("firebase-credentials.json")
+streak_tracker = UserStreakTracker("project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json")
 
 # Routes for HTML files
 @app.route('/')
