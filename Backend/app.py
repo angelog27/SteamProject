@@ -10,7 +10,7 @@ from firebase_admin import credentials, firestore                  # Import cred
 from datetime import datetime, timezone                            # Import datetime and timezone so whenever we log our data in firebase its in UTC
 import zoneinfo                                                    # Import zoneinfo to handle timezone information
 
-load_dotenv()   #loads .env file
+load_dotenv()   #this loads the .env file
 
 app = Flask(__name__, static_folder='.') 
 CORS(app)  #initalize CORS for the app and our flask server
