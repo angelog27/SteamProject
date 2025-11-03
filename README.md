@@ -14,17 +14,13 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 * .env file
   * The .env file contains the API_KEY which a user must have in order to run the script and make API calls
   * Within the .env file it should be formatted as STEAM_API_KEY = yoursteamapikey
+  * I added a example .env file but it contains my actual api key just rename that file to .env
 * .gitignore file
-* all front end code, index.html, leaderboard.html, profile.html, and stylesheet.css as well as the IMAGE.PNG
-* FIREBASE-CREDENTIALS JSON file. This is needed in order to run the code and properly connect to the firebase API
-* Python 3.10+
-* Flask library
-* Flask-CORS Library
-* Requests
-* Python-dotenv
-* Firebase Admin SDK
+* all front end code, index.html, leaderboard.html, profile.html, and stylesheet.css as well as the IMAGE.PNG which should be in a seperate folder titled images
+* FIREBASE-CREDENTIALS JSON file. This is needed in order to run the code and properly connect to the firebase API, The current firebase-credentials.json folder is a old key of crentials.
 
 ### Exact instilation requirements
+* make sure python version is 3.10 + 
 * pip install flask
 * pip install flask-cors
 * pip install requests
@@ -34,7 +30,32 @@ This is a Flask based website/applicaiton that allows a user to track their stea
 ## Running the Project
 ###
 BEFORE RUNNING THE PROJECT
-Prior to running you must have all of the HTML files, the LOGO.png, the firebase-credentials.json file and the .env file present with a api key inside of the .env file. 
+Prior to running you must have all of the HTML files, the LOGO.png which is in its seperate folder titled images, the firebase-credentials.json file and the .env file present with a api key inside of the .env file. 
+
+The strcuture should be 
+ALL FILES MUST BE PRESENT TO RUN
+
+3380PROJ(folder)
+|
+images (folder)
+|     |
+|     |
+|       LOGO.png
+|
+.env(file)
+|
+app.py(file)
+|
+index.html(file)
+|
+leaderboard.html(file)
+|
+profile.html(file)
+|
+stylesheet.css(file)
+|
+project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json(file)
+
 
 In order to run the program simply run the app.py program which is inside of the backend folder. 
 * step 1 is to run the app.py script
