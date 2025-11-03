@@ -61,7 +61,7 @@ project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json(file)
 In order to run the program simply run the app.py program which is inside of the backend folder. 
 * step 1 is to run the app.py script
 * In the terminal there will be a url as http://localhost:5000/ or a 1:27:5000 
-* Double click the index.html file and click the open with live server or go to http://localhost:5000. Make sure the live server extension is installed on vscode
+* Double click the index.html file and click the open with live server or go to http://localhost:5000//or the 1:27:5000 URL in the terminal. Make sure the live server extension is installed on vscode
 * You MUST enter a 17 digit steam ID in order to login and properly get a random achivement
 * A username is optional
 * Once you enter your 17 digit steam ID you can press LOGIN, and then press the random achievement button to fetch a random achievement
