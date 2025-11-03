@@ -13,7 +13,7 @@ import zoneinfo                                                    # Import zone
 load_dotenv()   #this loads the .env file
 
 app = Flask(__name__, static_folder='.') 
-CORS(app)  #initalize CORS for the app and our flask server
+CORS(app)  # this will initalize the CORS for the app and our groups flask server
 
 # Steam API Handler
 class SteamAchievementFetcher:
