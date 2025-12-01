@@ -10,18 +10,18 @@ from firebase_admin import credentials, firestore                  # Import cred
 from datetime import datetime, timezone                            # Import datetime and timezone so whenever we log our data in firebase its in UTC
 import zoneinfo                                                    # Import zoneinfo to handle timezone information
 
-load_dotenv()   #this loads the .env file
+load_dotenv()   #loads .env file
 
 app = Flask(__name__, static_folder='.') 
-CORS(app)  # this will initalize the CORS for the app and our groups flask server
+CORS(app)  #initalize CORS for the app and our flask server
 
-# this is the Steam API Handler
+# Steam API Handler
 class SteamAchievementFetcher:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://api.steampowered.com/"
 
-    #the code below allow you to get achievements for a specific game 
+    #Get achievements for a specific game
     def get_game_achievements(self, app_id) -> Optional[List[Dict]]:
         url = f"{self.base_url}/ISteamUserStats/GetSchemaForGame/v2/"
         params = {'key': self.api_key, 'appid': app_id}
@@ -36,7 +36,7 @@ class SteamAchievementFetcher:
         except requests.exceptions.RequestException as e:
             print(f"Error fetching achievements: {e}")
             return None
-    #this section is  used  to fetch random achievements 
+    #we use this to fetch our random achievements 
     def get_random_achievement(self, app_id: int) -> Optional[Dict]:
         # Simple in-memory cache for achievements per app_id
         if not hasattr(self, '_achievement_cache'):
@@ -51,7 +51,7 @@ class SteamAchievementFetcher:
             return None
         return random.choice(achievements)
 
-#here is the tracker for user streaks and achievements
+#Tracker for user streaks and achievements
 class UserStreakTracker:
     def __init__(self, firebase_cred_path: str):
         if not firebase_admin._apps:
@@ -60,7 +60,7 @@ class UserStreakTracker:
         self.db = firestore.client()
         self.users_collection = self.db.collection('users')
 
-# this is the create or get user in the database
+# Create or get user in the database
     def get_or_create_user(self, steam_id: str, username: str = None) -> Dict:
         user_ref = self.users_collection.document(steam_id)
         user_doc = user_ref.get()
@@ -81,7 +81,7 @@ class UserStreakTracker:
             user_ref.set(new_user) # we set the new user in our firebase database
             return new_user
         
-    # Complete an achievement along with update streaks
+    # Complete an achievement and update streaks
     def complete_achievement(self, steam_id: str) -> Dict:
         user_ref = self.users_collection.document(steam_id)
         user_doc = user_ref.get()
@@ -89,12 +89,12 @@ class UserStreakTracker:
         if not user_doc.exists:
             return None
         
-        # We use this to access our firebase database and get the user data
+        # We access our firebase database and get the user data
         user_data = user_doc.to_dict()
         current_time = datetime.now(timezone.utc)
         last_achievement_date = user_data.get('last_achievement_date')
         
-        # This part makes sure we dont increment streak if we have already completed an achievement today 
+        # Dont increment streak if we have already completed an achievement today
         if last_achievement_date is None:
             user_data['current_streak'] = 1
             user_data['longest_streak'] = 1
@@ -121,7 +121,7 @@ class UserStreakTracker:
                 user_data['last_achievement_date'] = current_time
                 if user_data['current_streak'] > user_data['longest_streak']:
                     user_data['longest_streak'] = user_data['current_streak']
-            # if the user doesnt increment the streak in over 48 hours then we will reset the streak they day
+            # if the user doesnt increment the streak in over 48 hours we reset the streak
             else:
                 user_data['current_streak'] = 1
                 user_data['total_achievements_completed'] += 1
@@ -145,12 +145,12 @@ class UserStreakTracker:
         users = self.users_collection.order_by('longest_streak', direction=firestore.Query.DESCENDING).limit(10).stream()
         return [user.to_dict() for user in users]
 
-# Initialize firebase and steam API services/access
+# Initialize services
 STEAM_API_KEY = os.getenv("STEAM_API_KEY")
 steam_fetcher = SteamAchievementFetcher(STEAM_API_KEY)
 streak_tracker = UserStreakTracker("project-1605460067186308595-firebase-adminsdk-fbsvc-45bc08e460.json")
 
-# these are the routes for HTML files used
+# Routes for HTML files
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -160,8 +160,8 @@ def index():
 def serve_file(path):
     return send_from_directory('.', path)
 
-# the acutal API Routes 
-# User login or creation, using the username as optional but the steam id is required to access the next page
+# API Routes 
+# User login or creation, using the username as optional but the steam id is required
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
@@ -177,7 +177,7 @@ def login():
 @app.route('/api/random-achievement', methods=['GET'])
 def random_achievement():
     popular_app_ids = [620, 292030, 367520, 504230, 413150, 440, 730, 570, 550, 105600]
-    app_id = random.choice(popular_app_ids) # here we are selecting a random game from our popular app id's
+    app_id = random.choice(popular_app_ids) # selecting a random game from our popular app id's
     achievement = steam_fetcher.get_random_achievement(app_id)
     
     if achievement:
