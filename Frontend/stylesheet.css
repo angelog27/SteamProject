@@ -1,32 +1,133 @@
 * {
 	box-sizing: border-box;
-	margin: 0px;
-	padding: 0px;
-	background-color: darkslategray;
-	text-decoration: none;
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif"
+	margin: 0;
+	padding: 0;
 }
+
+body {
+	background-color: #2f4f4f;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	color: #f5f5f5;
+}
+
 header {
-	display:flex;
+	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 1.5rem 3rem;
+	background-color: #1a2f2f;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
+
 .Wrapper {
-	display:flex;
+	display: flex;
 	justify-content: center;
 	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
 }
-.Nav_Menu li{
-	padding: 20px;
-	display: inline-block
+
+.Nav_Menu {
+	list-style: none;
 }
-.Nav_Menu li a{
-	color:darkblue;
-	transition: all 0.3s ease 0s;
+
+.Nav_Menu li {
+	display: inline-block;
+	padding: 0 1.25rem;
 }
-.Nav_Menu li a:hover{
-	color:blueviolet;
+
+.Nav_Menu li a {
+	color: #87ceeb;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+	position: relative;
 }
+
+.Nav_Menu li a::after {
+	content: '';
+	position: absolute;
+	width: 0;
+	height: 2px;
+	bottom: -5px;
+	left: 0;
+	background-color: #9370db;
+	transition: width 0.3s ease;
+}
+
+.Nav_Menu li a:hover {
+	color: #9370db;
+}
+
+.Nav_Menu li a:hover::after {
+	width: 100%;
+}
+
 button {
-	justify-content: center;
+	padding: 0.75rem 1.5rem;
+	background-color: #4682b4;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+	background-color: #5a9bd4;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.Input-box {
+	margin-top: 1rem;
+}
+
+.Input-box input {
+	width: 100%;
+	padding: 12px 15px;
+	font-size: 1rem;
+	color: white;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 2px solid #4682b4;
+	border-radius: 6px;
+	outline: none;
+	transition: border-color 0.3s ease;
+}
+
+.Input-box input::placeholder {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.Input-box input:focus {
+	border-color: #87ceeb;
+}
+
+h1, h2 {
+	color: white;
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+/* Achievement display area */
+#achievementDisplay {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 8px;
+	padding: 1.5rem;
+	margin-top: 1rem;
+}
+
+#achievementDisplay p {
+	color: white;
+	margin: 0.5rem 0;
 }
