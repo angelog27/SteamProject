@@ -18,16 +18,20 @@
 	</header>
 	<div class="Wrapper">
 		<div>
-			<h1>SteamID</h1>
-			<div class="Input-box">
-				<input type="text" id="steamId" placeholder="17 Digit Steam ID">
+			<!-- LOGIN SECTION (hiddin after login) -->
+			<div id="loginSection">
+				<h1>SteamID</h1>
+				<div class="Input-box">
+					<input type="text" id="steamId" placeholder="17 Digit Steam ID">
+				</div>
+				<div class="Input-box">
+					<input type="text" id="username" placeholder="Username (Optional)">
+				</div>
+				<button type="submit" onclick="login()">Login</button>
+				<p id="loginMessage"></p>
 			</div>
-			<div class="Input-box">
-				<input type="text" id="username" placeholder="Username (Optional)">
-			</div>
-			<button type="submit" onclick="login()">Login</button>
-			<p id="loginMessage"></p>
 			
+			<!-- ACHIEVEMENT SECTION (show after login) -->
 			<div id="achievementSection" style="display:none; margin-top: 30px;">
 				<h2>Get Achievement Challenge</h2>
 				<button onclick="getRandomAchievement()">Random Achievement</button>
@@ -40,16 +44,21 @@
 				<div id="achievementDisplay" style="margin-top: 20px;"></div>
 				
 				<button onclick="completeAchievement()" style="margin-top: 20px;">Mark Achievement Complete</button>
+				
+				<!-- Logout button -->
+				<button onclick="logout()" style="margin-top: 20px;">Logout</button>
 			</div>
 		</div>
 	</div>
 
 	<script>
 		let currentSteamId = localStorage.getItem('steamId') || '';
+		let currentAchievement = null; // Track if an achievement is active
 
+		// Check if already logged in when page loads
 		if (currentSteamId) {
+			document.getElementById('loginSection').style.display = 'none';
 			document.getElementById('achievementSection').style.display = 'block';
-			document.getElementById('steamId').value = currentSteamId;
 		}
 
 		async function login() {
@@ -72,7 +81,9 @@
 				if (response.ok) {
 					currentSteamId = steamId;
 					localStorage.setItem('steamId', steamId);
-					document.getElementById('loginMessage').textContent = `Welcome, ${data.username}!`;
+					
+					// Hide login section, show achievement section
+					document.getElementById('loginSection').style.display = 'none';
 					document.getElementById('achievementSection').style.display = 'block';
 				} else {
 					document.getElementById('loginMessage').textContent = data.error;
@@ -82,12 +93,29 @@
 			}
 		}
 
+		function logout() {
+			localStorage.removeItem('steamId');
+			currentSteamId = '';
+			currentAchievement = null;
+			
+			// Show login section, hide achievement section
+			document.getElementById('loginSection').style.display = 'block';
+			document.getElementById('achievementSection').style.display = 'none';
+			
+			// Clear inputs
+			document.getElementById('steamId').value = '';
+			document.getElementById('username').value = '';
+			document.getElementById('loginMessage').textContent = '';
+			document.getElementById('achievementDisplay').innerHTML = '';
+		}
+
 		async function getRandomAchievement() {
 			try {
 				const response = await fetch('http://localhost:5000/api/random-achievement');
 				const data = await response.json();
 				
 				if (response.ok) {
+					currentAchievement = data; // Store the current achievement
 					displayAchievement(data);
 				} else {
 					document.getElementById('achievementDisplay').innerHTML = data.error;
@@ -110,6 +138,7 @@
 				const data = await response.json();
 				
 				if (response.ok) {
+					currentAchievement = data; // Store the current achievement
 					displayAchievement(data);
 				} else {
 					document.getElementById('achievementDisplay').innerHTML = data.error;
@@ -135,7 +164,13 @@
 				return;
 			}
 
-			const confirm = window.confirm('Did you complete an achievement? This will update your streak.');
+			// Make sure an achievement has actually been fetched
+			if (!currentAchievement) {
+				alert('Please get an achievement first before marking it complete!');
+				return;
+			}
+
+			const confirm = window.confirm('Did you complete this achievement? This will update your streak.');
 			if (!confirm) return;
 
 			try {
@@ -148,6 +183,10 @@
 				const data = await response.json();
 				if (response.ok) {
 					alert(`Achievement completed! Current Streak: ${data.current_streak} days`);
+					
+					// Clear the current achievement after completion
+					currentAchievement = null;
+					document.getElementById('achievementDisplay').innerHTML = '<p>Achievement completed! Get another one to continue.</p>';
 				} else {
 					alert(data.error);
 				}
