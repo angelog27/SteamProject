@@ -16,4 +16,4 @@ Performance Monitoring — tracked engagement metrics, uptime, and data integrit
 
 Tech Stack : Python, Flask, HTML, CSS, JavaScript, Firebase, Steam Web API, Steam Open ID
 
-Project is getting a new frontend made as of now, so run instructions will update 
+Project is getting a new frontend made as of now, so run instructions will update in this file shortly.
