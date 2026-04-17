@@ -15,3 +15,5 @@ Leaderboards — compare achievement counts and completion rates with other user
 Performance Monitoring — tracked engagement metrics, uptime, and data integrity throughout development 
 
 Tech Stack : Python, Flask, HTML, CSS, JavaScript, Firebase, Steam Web API, Steam Open ID
+
+Project is getting a new frontend made as of now, so run instructions will update 
