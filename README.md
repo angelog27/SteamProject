@@ -17,3 +17,5 @@ Performance Monitoring — tracked engagement metrics, uptime, and data integrit
 Tech Stack : Python, Flask, HTML, CSS, JavaScript, Firebase, Steam Web API, Steam Open ID
 
 Project is getting a new frontend made as of now, so run instructions will update in this file shortly.
+
+You can see the case study for this project with this link : https://demetri-williams.vercel.app/case-studies#steam
