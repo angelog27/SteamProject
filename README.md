@@ -12,4 +12,4 @@ Responsive Dashboard — clean UI for tracking progress across multiple games
 
 Leaderboards — compare achievement counts and completion rates with other users
 
-Performance Monitoring — tracked engagement metrics, uptime, and data integrity throughout development
+Performance Monitoring — tracked engagement metrics, uptime, and data integrity throughout development 
