@@ -884,6 +884,7 @@
       <button class="mode-tab active" onclick="switchMode('browse')">Browse Game</button>
       <button class="mode-tab" onclick="switchMode('user')">My Progress</button>
       <button class="mode-tab" onclick="switchMode('random')">Random Drop</button>
+      <button class="mode-tab" onclick="switchMode('leaderboard')">Leaderboard</button>
     </div>
   </div>
 
@@ -1091,10 +1092,29 @@
     </div>
   </div>
 
+
+  <div class="panel" id="panel-leaderboard">
+    <div class="search-card">
+      <div class="search-card-title">Global Leaderboard</div>
+      <div class="input-group">
+        <div class="input-wrap">
+          <label>Filter by App ID (optional)</label>
+          <input type="number" id="lb-appid" placeholder="Leave blank for all games" />
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="btn btn-primary" onclick="fetchLeaderboard()">Load</button>
+        </div>
+      </div>
+    </div>
+    <div class="loading-state" id="lb-loading"><div class="spinner"></div><div class="loading-text">Loading Leaderboard</div></div>
+    <div id="lb-results" style="display:none;">
+      <div class="achievement-grid" id="lb-grid"></div>
+    </div>
+  </div>
 </main>
 
 <script>
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 const POPULAR = [
   {id:620,name:'Portal 2'},
@@ -1317,6 +1337,37 @@ function showError(prefix, msg) {
 function clearState(prefix) {
   document.getElementById(prefix + '-error').classList.remove('visible');
   hide(prefix + '-loading');
+}
+
+
+async function fetchLeaderboard() {
+  const appId = document.getElementById('lb-appid').value.trim();
+  show('lb-loading');
+  document.getElementById('lb-results').style.display = 'none';
+  try {
+    const url = appId ? `/api/leaderboard?app_id=${appId}` : '/api/leaderboard';
+    const res = await fetch(url);
+    const data = await res.json();
+    const grid = document.getElementById('lb-grid');
+    grid.innerHTML = data.leaderboard.map((e, i) => `
+      <div class="achievement-card">
+        <div class="ach-icon-placeholder" style="background:var(--steam-blue-dim);color:var(--steam-blue);font-family:Rajdhani,sans-serif;font-size:1.4rem;font-weight:700;">#${i+1}</div>
+        <div class="ach-body">
+          <div class="ach-name">${escHtml(e.game_name)}</div>
+          <div class="ach-desc">Steam ID: ${escHtml(e.steam_id)}</div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <span class="ach-badge unlocked">${e.completion_pct}% Complete</span>
+            <span class="ach-badge unlocked">🔥 ${e.streak} day streak</span>
+          </div>
+        </div>
+      </div>
+    `).join('') || '<p style="color:var(--text-muted);padding:2rem 0;">No entries yet.</p>';
+    document.getElementById('lb-results').style.display = 'block';
+  } catch(e) {
+    console.error(e);
+  } finally {
+    hide('lb-loading');
+  }
 }
 
 // ── Init ──
